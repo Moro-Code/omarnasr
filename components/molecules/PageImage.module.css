@@ -1,0 +1,10 @@
+.pageImageContainer {
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.pageImage {
+  border-radius: 100%;
+  border: 2px dashed var(--primary-text-color) !important;
+}

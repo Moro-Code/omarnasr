@@ -1,0 +1,32 @@
+/*************************************************************************************
+*Contains global utilities used across multiple components and pages across the site
+*************************************************************************************/
+
+/*container which depending on the screen size will adjust size to create a layout*/
+.layout-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.align-center {
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .layout-container {
+    max-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout-container {
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 480px) {
+  .layout-container {
+    max-width: 100%;
+  }
+}

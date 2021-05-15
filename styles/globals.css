@@ -1,16 +1,97 @@
+/*****************************************************************************
+*styles here are applied globally across the entire application.
+******************************************************************************/
+
+/*default variables for the site*/
+:root {
+  --background-color: #fff;
+  --primary-text-color: #000;
+  --secondary-text-color: #aeb0b4;
+  --active-text-color: #2962ff;
+  --primary-button-color: #2451ff;
+  --mobile-breakpoint: 480px;
+  --tablet-breakpoint: 768px;
+  --laptop-breakpoint: 1024px;
+  --desktop-breakpoint: 1200px;
+}
+
+/*variables for dark mode*/
+[data-theme="dark"] {
+  --background-color: #161819;
+  --primary-text-color: white;
+  --secondary-text-color: #555556;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
+  font-size: 16px;
+  color: var(--primary-text-color);
+  background-color: var(--background-color);
+  height: 100vh;
+  min-width: fit-content;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a {
+/* default sizes for text*/
+h1 {
+  font-size: 3.052rem;
+  text-decoration: underline;
+  font-weight: 900;
   color: inherit;
+  margin: 5px 0;
+}
+
+h2 {
+  font-size: 2.441rem;
+  font-weight: 700;
+  color: inherit;
+  margin: 2px 0;
+}
+
+h3 {
+  font-size: 1.953rem;
+  font-weight: 700;
+  color: inherit;
+  margin: 2px 0;
+}
+
+h4 {
+  font-size: 1.563rem;
+  font-weight: 700;
+  color: inherit;
+  margin: 2px 0;
+}
+
+h5 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: inherit;
+  margin: 2px 0;
+}
+
+p {
+  font-size: 1rem;
+  color: inherit;
+  margin: 2px 0;
+}
+
+/*link default styling*/
+a {
+  color: var(--primary-text-color);
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+a:hover,
+a:active,
+a:focus {
+  color: var(--active-text-color);
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2.5rem;
+  }
 }

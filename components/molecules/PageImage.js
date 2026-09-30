@@ -14,7 +14,6 @@ export default function PageImage({ image, altText, width, height }) {
         alt={altText}
         width={width}
         height={height}
-        layout="fixed"
       />
     </div>
   );

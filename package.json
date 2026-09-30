@@ -1,32 +1,31 @@
 {
   "name": "omarnasr",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "prettier --write \"components/**/*.{js,json,md,css}\" --write \"data/**/*.{js,json,md,css}\" --write \"lib/**/*.{js,json,md,css}\" --write \"pages/**/*.{js,json,md,css}\" --write \".storybook/**/*.{js,json,md,css}\" --write \"stories/**/*.{js,json,md,css,mdx}\"",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "lint": "prettier --check .",
+    "format": "prettier --write .",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
-    "next": "10.2.0",
-    "react": "17.0.2",
-    "react-dark-mode-toggle": "^0.2.0",
-    "react-dom": "17.0.2"
+    "next": "16.3.8",
+    "prop-types": "^15.8.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.2",
-    "@storybook/addon-a11y": "^6.2.9",
-    "@storybook/addon-actions": "^6.2.9",
-    "@storybook/addon-docs": "^6.2.9",
-    "@storybook/addon-essentials": "^6.2.9",
-    "@storybook/addon-links": "^6.2.9",
-    "@storybook/react": "^6.2.9",
-    "babel-loader": "^8.2.2",
-    "prettier": "^2.3.0",
-    "storybook-css-modules-preset": "^1.1.1",
-    "webpack": "^4.46.0"
+    "@storybook/addon-a11y": "10.6.1",
+    "@storybook/addon-docs": "10.6.1",
+    "@storybook/addon-links": "10.6.1",
+    "@storybook/nextjs-vite": "10.6.1",
+    "prettier": "3.9.9",
+    "storybook": "10.6.1"
   }
 }

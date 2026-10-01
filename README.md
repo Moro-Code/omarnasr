@@ -27,4 +27,4 @@ Career history, selected work, and skill groups are in `pages/index.js`. Styling
 
 ## Deployment
 
-The existing Next.js deployment can continue using `npm run build`. Configure the hosting runtime to use Node.js 22 or newer. No environment variables or external font services are required. The Pages Router is retained; Storybook uses the current Next.js Vite integration.
+The existing Next.js deployment can continue using `npm run build`. Configure the hosting runtime to use Node.js 22 or newer. The portfolio does not require environment variables. The optional live workout feed requires server-only configuration and an Apple Health export from your phone; see [WORKOUT_SETUP.md](WORKOUT_SETUP.md). No external font services are required. The Pages Router is retained; Storybook uses the current Next.js Vite integration.

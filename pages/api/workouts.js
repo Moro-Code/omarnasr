@@ -21,8 +21,15 @@ function authorized(header) {
     createHash("sha256").update(`Bearer ${secret}`).digest(),
   );
 }
+function storageConfig() {
+  // Keep each endpoint paired with its corresponding token.
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN)
+    return { url: process.env.UPSTASH_REDIS_REST_URL, token: process.env.UPSTASH_REDIS_REST_TOKEN };
+  return { url: process.env.KV_REST_API_URL, token: process.env.KV_REST_API_TOKEN };
+}
 async function redis(command) {
-  const endpoint = new URL(process.env.UPSTASH_REDIS_REST_URL);
+  const storage = storageConfig();
+  const endpoint = new URL(storage.url);
   if (endpoint.protocol !== "https:")
     throw new Error("Invalid storage configuration");
   const response = await fetch(endpoint, {
@@ -30,7 +37,7 @@ async function redis(command) {
     signal: AbortSignal.timeout(7000),
     cache: "no-store",
     headers: {
-      Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+      Authorization: `Bearer ${storage.token}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(command),
@@ -51,8 +58,8 @@ export default async function handler(req, res) {
   if (req.method !== "GET" && !authorized(req.headers.authorization))
     return res.status(401).json({ error: "Unauthorized" });
   if (
-    !process.env.UPSTASH_REDIS_REST_URL ||
-    !process.env.UPSTASH_REDIS_REST_TOKEN
+    !storageConfig().url ||
+    !storageConfig().token
   )
     return res.status(503).json(unknown());
   try {

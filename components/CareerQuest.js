@@ -117,7 +117,7 @@ export default function CareerQuest({ experience }) {
 
   useEffect(() => {
     if (focusNext.current) {
-      heading.current?.focus({ preventScroll: true });
+      heading.current?.focus();
       focusNext.current = false;
     }
   }, [phase, step]);

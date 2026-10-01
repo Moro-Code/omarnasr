@@ -1,4 +1,5 @@
 import Head from "next/head";
+import CareerQuest from "../components/CareerQuest";
 import { useState } from "react";
 import styles from "../styles/Home.module.css";
 
@@ -264,6 +265,9 @@ export default function Home() {
             <a href="#experience" onClick={closeMenu}>
               Experience
             </a>
+            <a href="#career-quest" onClick={closeMenu}>
+              Play my career
+            </a>
             <a href="#about" onClick={closeMenu}>
               About
             </a>
@@ -376,6 +380,7 @@ export default function Home() {
             ))}
           </div>
         </section>
+        <CareerQuest experience={experience} />
         <section
           id="experience"
           className={styles.section}

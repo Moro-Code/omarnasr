@@ -226,10 +226,11 @@
   flex: 1;
   min-width: 0;
 }
-.workouts a {
+.workouts strong {
   font-size: 13px;
   line-height: 1.5;
   overflow-wrap: anywhere;
+  font-weight: 500;
 }
 .workouts a:hover {
   color: var(--accent);

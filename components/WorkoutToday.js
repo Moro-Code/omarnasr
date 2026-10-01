@@ -44,7 +44,7 @@ export default function WorkoutToday() {
       controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 12000);
       try {
-        const response = await fetch("/api/strava", {
+        const response = await fetch("/api/workouts", {
           signal: controller.signal,
           cache: "no-store",
         });
@@ -88,7 +88,7 @@ export default function WorkoutToday() {
     feed?.status === "ready" &&
     now &&
     feed.date === workoutDate(now) &&
-    now - new Date(feed.checkedAt) < 10 * 60000;
+    now - new Date(feed.checkedAt) < 24 * 60 * 60000;
   const loading = !feed;
   const workedOut = fresh && feed.didWorkout;
   const label = loading
@@ -170,12 +170,12 @@ export default function WorkoutToday() {
           </div>
           <p className={styles.explanation}>
             {loading
-              ? "Checking today’s public Strava activities."
+              ? "Checking today’s workout sync."
               : !fresh
                 ? "Today’s activity hasn’t been confirmed here. You can still catch up with me on Strava."
                 : workedOut
-                  ? `${feed.totals.count} public ${feed.totals.count === 1 ? "activity" : "activities"} logged today. Every session counts.`
-                  : "No public activities logged on Strava today. The day’s not over yet."}
+                  ? `${feed.totals.count} ${feed.totals.count === 1 ? "workout" : "workouts"} logged today. Every session counts.`
+                  : "No workouts in the latest Apple Health sync. The day’s not over yet."}
           </p>
           {fresh && (
             <dl className={styles.stats}>
@@ -184,7 +184,7 @@ export default function WorkoutToday() {
                 <dd>{feed.totals.count}</dd>
               </div>
               <div>
-                <dt>Moving time</dt>
+                <dt>Workout time</dt>
                 <dd>{durationLabel(feed.totals.durationSeconds)}</dd>
               </div>
               <div>
@@ -208,13 +208,7 @@ export default function WorkoutToday() {
                     <FitnessIcon small />
                   </span>
                   <div>
-                    <a
-                      href={workout.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {workout.name} <span aria-hidden="true">↗</span>
-                    </a>
+                    <strong>{workout.name}</strong>
                     <p>
                       {workout.sport} · {durationLabel(workout.durationSeconds)}
                       {workout.distanceMetres > 0
@@ -247,8 +241,8 @@ export default function WorkoutToday() {
           <div className={styles.footer}>
             <p>
               {fresh
-                ? `Checked ${new Intl.DateTimeFormat("en-CA", { timeZone: WORKOUT_TIME_ZONE, hour: "numeric", minute: "2-digit" }).format(new Date(feed.checkedAt))} · Ottawa time`
-                : "Public activities only · Ottawa time"}
+                ? `Synced ${new Intl.DateTimeFormat("en-CA", { timeZone: WORKOUT_TIME_ZONE, hour: "numeric", minute: "2-digit" }).format(new Date(feed.checkedAt))} · Ottawa time`
+                : "Apple Health · Ottawa time"}
             </p>
             {fresh ? (
               <a

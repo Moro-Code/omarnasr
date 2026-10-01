@@ -11,7 +11,7 @@ const experience = [
     description:
       "Building the foundations for reliable, secure healthcare technology.",
     bullets: [
-      "Deployed AnyCable on EKS to enable real-time features for thousands of concurrent users.",
+      "Built and operated EKS workloads supporting real-time platform features for thousands of concurrent users.",
       "Built OWASP-based vulnerability triage workflows and implemented GuardDuty malware scanning for S3 uploads.",
       "Delivered zero-downtime EKS ingress migrations and led on-call incident response.",
     ],
@@ -64,31 +64,31 @@ const experience = [
 ];
 const projects = [
   {
-    type: "PLATFORM & RELIABILITY",
-    title: "Real-time, without the downtime.",
+    type: "AWS & CLOUD ARCHITECTURE",
+    title: "Cloud foundations that scale.",
     description:
-      "Kubernetes infrastructure for AnyCable WebSockets, paired with zero-downtime EKS ingress migrations from ALB to NLB.",
-    tags: ["AWS EKS", "Kubernetes", "Terraform"],
+      "Designing and operating AWS infrastructure with Terraform, managed services, and security built in — from application workloads to the platforms beneath them.",
+    tags: ["AWS", "Terraform", "Cloud architecture"],
     visual: "platform",
-    detail: "Fullscript · DevOps engineering",
+    detail: "Reproducible infrastructure · Secure by design",
   },
   {
-    type: "AI & DEVELOPER EXPERIENCE",
-    title: "A second pair of eyes on every review.",
+    type: "KUBERNETES & PLATFORM ENGINEERING",
+    title: "Platforms teams can depend on.",
     description:
-      "Merge Medic: an AI-powered merge request assistant built to help the engineering team move code reviews forward.",
-    tags: ["Python", "OpenAI API", "GitLab API"],
+      "Building and running Kubernetes platforms on EKS, with repeatable delivery, reliable networking, and zero-downtime migrations that keep teams moving.",
+    tags: ["Kubernetes", "EKS", "CI/CD"],
     visual: "review",
-    detail: "Fullscript · Merge Medic",
+    detail: "Container orchestration · Developer experience",
   },
   {
-    type: "PUBLIC-SERVICE TECHNOLOGY",
-    title: "Better forms. Better public services.",
+    type: "SCALE & RELIABILITY",
+    title: "Built for growth. Ready for change.",
     description:
-      "End-to-end delivery for GC Forms, a government-wide platform with accessible, bilingual experiences and cloud-native infrastructure.",
-    tags: ["Next.js", "TypeScript", "AWS"],
+      "Engineering cloud-native services for unpredictable demand, backed by observability, performance tuning, and hands-on incident response.",
+    tags: ["Scalability", "Observability", "SRE"],
     visual: "forms",
-    detail: "Canada Digital Service · GC Forms",
+    detail: "High availability · Production resilience",
   },
 ];
 const skills = [
@@ -150,7 +150,7 @@ function ProjectVisual({ kind }) {
         <div className={styles.connectors} />
         <div className={styles.nodeRow}>
           <span>INGRESS</span>
-          <span>ANYCABLE</span>
+          <span>WORKLOADS</span>
           <span>SERVICES</span>
         </div>
         <div className={styles.signal}>
@@ -165,26 +165,24 @@ function ProjectVisual({ kind }) {
     return (
       <div className={styles.codeWindow} aria-hidden="true">
         <div className={styles.windowBar}>
-          <span>● ● ●</span> merge-medic.py
+          <span>● ● ●</span> platform.yaml
         </div>
         <div className={styles.code}>
           <p>
-            <b>def</b> review_merge_request(mr):
+            <b>kind:</b> Deployment
           </p>
-          <p>&nbsp; context = fetch_diff(mr)</p>
+          <p>replicas: 3</p>
           <p>
-            &nbsp; review = <b>ai</b>.analyze(context)
+            <b>strategy:</b> RollingUpdate
           </p>
-          <p>
-            &nbsp; <b>return</b> publish(review)
-          </p>
+          <p>readinessProbe: enabled</p>
         </div>
         <div className={styles.reviewNote}>
           <span>✦</span>
           <div>
-            Less friction.
+            Repeatable delivery.
             <br />
-            <strong>More thoughtful reviews.</strong>
+            <strong>Reliable operations.</strong>
           </div>
         </div>
       </div>
@@ -192,16 +190,16 @@ function ProjectVisual({ kind }) {
   return (
     <div className={styles.formVisual} aria-hidden="true">
       <div className={styles.formTop}>
-        GC <strong>Forms</strong>
-        <span>EN / FR</span>
+        Service <strong>health</strong>
+        <span>OBSERVE</span>
       </div>
       <div className={styles.formBody}>
-        <span>Built for everyone.</span>
+        <span>Traffic. Latency. Errors.</span>
         <div />
         <div />
         <div className={styles.shortLine} />
         <p>
-          Accessible by design <b>✓</b>
+          Visibility across the stack <b>✓</b>
         </p>
       </div>
     </div>
@@ -261,7 +259,7 @@ export default function Home() {
             className={`${styles.nav} ${menuOpen ? styles.navOpen : ""}`}
           >
             <a href="#work" onClick={closeMenu}>
-              Selected work
+              Expertise
             </a>
             <a href="#experience" onClick={closeMenu}>
               Experience
@@ -296,7 +294,7 @@ export default function Home() {
             </p>
             <div className={styles.heroActions}>
               <a className={styles.primaryButton} href="#work">
-                Explore my work <span aria-hidden="true">↓</span>
+                Explore my expertise <span aria-hidden="true">↓</span>
               </a>
               <a className={styles.resumeLink} href="#experience">
                 View experience <span aria-hidden="true">↓</span>
@@ -348,13 +346,13 @@ export default function Home() {
         >
           <div className={styles.sectionHeading}>
             <div>
-              <p className={styles.eyebrow}>01 / SELECTED WORK</p>
+              <p className={styles.eyebrow}>01 / CORE EXPERTISE</p>
               <h2 id="work-heading">Engineering with impact.</h2>
             </div>
             <p>
-              A few of the systems, tools, and
-              <br className={styles.desktopBreak} /> experiences I’ve helped
-              bring to life.
+              The infrastructure, platforms, and
+              <br className={styles.desktopBreak} /> engineering practices I
+              bring to every system.
             </p>
           </div>
           <div className={styles.projectGrid}>
@@ -524,9 +522,6 @@ export default function Home() {
             </a>
             <a href="https://www.linkedin.com/in/ott-omar-nasr/">
               LinkedIn <Arrow />
-            </a>
-            <a href="https://blog.omarnasr.ca">
-              Writing <Arrow />
             </a>
           </div>
         </div>

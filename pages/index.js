@@ -82,13 +82,13 @@ const projects = [
     detail: "Container orchestration · Developer experience",
   },
   {
-    type: "SCALE & RELIABILITY",
-    title: "Built for growth. Ready for change.",
+    type: "MENTORSHIP & DEVELOPER PRODUCTIVITY",
+    title: "Helping engineers do their best work.",
     description:
-      "Engineering cloud-native services for unpredictable demand, backed by observability, performance tuning, and hands-on incident response.",
-    tags: ["Scalability", "Observability", "SRE"],
+      "Mentoring engineers, removing delivery friction, and building tools and workflows that help teams ship confidently — with reliable systems that scale behind them.",
+    tags: ["Mentorship", "Developer experience", "Automation"],
     visual: "forms",
-    detail: "High availability · Production resilience",
+    detail: "Stronger teams · Smoother delivery",
   },
 ];
 const skills = [
@@ -190,16 +190,16 @@ function ProjectVisual({ kind }) {
   return (
     <div className={styles.formVisual} aria-hidden="true">
       <div className={styles.formTop}>
-        Service <strong>health</strong>
-        <span>OBSERVE</span>
+        Developer <strong>experience</strong>
+        <span>ENABLE</span>
       </div>
       <div className={styles.formBody}>
-        <span>Traffic. Latency. Errors.</span>
+        <span>Learn. Build. Ship.</span>
         <div />
         <div />
         <div className={styles.shortLine} />
         <p>
-          Visibility across the stack <b>✓</b>
+          Less friction. More momentum. <b>✓</b>
         </p>
       </div>
     </div>

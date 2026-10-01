@@ -1,4 +1,5 @@
 import Head from "next/head";
+import WorkoutToday from "../components/WorkoutToday";
 import CareerQuest from "../components/CareerQuest";
 import { useState } from "react";
 import styles from "../styles/Home.module.css";
@@ -271,6 +272,9 @@ export default function Home() {
             <a href="#about" onClick={closeMenu}>
               About
             </a>
+            <a href="#for-fun" onClick={closeMenu}>
+              For fun
+            </a>
             <a className={styles.navContact} href="mailto:omar@omarnasr.ca">
               Let’s talk <Arrow />
             </a>
@@ -497,6 +501,7 @@ export default function Home() {
             </a>
           </div>
         </section>
+        <WorkoutToday />
         <section className={styles.contact} aria-labelledby="contact-heading">
           <p className={styles.eyebrow}>LET’S CONNECT</p>
           <h2 id="contact-heading">

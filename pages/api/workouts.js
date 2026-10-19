@@ -23,9 +23,18 @@ function authorized(header) {
 }
 function storageConfig() {
   // Keep each endpoint paired with its corresponding token.
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN)
-    return { url: process.env.UPSTASH_REDIS_REST_URL, token: process.env.UPSTASH_REDIS_REST_TOKEN };
-  return { url: process.env.KV_REST_API_URL, token: process.env.KV_REST_API_TOKEN };
+  if (
+    process.env.UPSTASH_REDIS_REST_URL &&
+    process.env.UPSTASH_REDIS_REST_TOKEN
+  )
+    return {
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    };
+  return {
+    url: process.env.KV_REST_API_URL,
+    token: process.env.KV_REST_API_TOKEN,
+  };
 }
 async function redis(command) {
   const storage = storageConfig();
@@ -57,10 +66,7 @@ export default async function handler(req, res) {
   }
   if (req.method !== "GET" && !authorized(req.headers.authorization))
     return res.status(401).json({ error: "Unauthorized" });
-  if (
-    !storageConfig().url ||
-    !storageConfig().token
-  )
+  if (!storageConfig().url || !storageConfig().token)
     return res.status(503).json(unknown());
   try {
     if (req.method === "DELETE") {
@@ -75,21 +81,17 @@ export default async function handler(req, res) {
     if (req.method === "POST") {
       // Each upload is a complete Today snapshot: disable batching in the exporter.
       if (req.headers["x-workout-window"] !== "today")
-        return res
-          .status(400)
-          .json({
-            error: "Send a complete Today export with X-Workout-Window: today",
-          });
+        return res.status(400).json({
+          error: "Send a complete Today export with X-Workout-Window: today",
+        });
       let data;
       try {
         data = summarizeWorkouts(req.body);
       } catch {
-        return res
-          .status(422)
-          .json({
-            error:
-              "Invalid Today workout export; use Health Auto Export JSON v2 with timezone-aware dates",
-          });
+        return res.status(422).json({
+          error:
+            "Invalid Today workout export; use Health Auto Export JSON v2 with timezone-aware dates",
+        });
       }
       // Atomic replacement handles edits/deletions and makes repeat uploads idempotent.
       await redis(["SET", key(data.date), JSON.stringify(data), "EX", 172800]);

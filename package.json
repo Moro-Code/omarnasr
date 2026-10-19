@@ -12,7 +12,8 @@
     "lint": "prettier --check .",
     "format": "prettier --write .",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test": "node --test *.test.mjs"
   },
   "dependencies": {
     "next": "16.3.8",

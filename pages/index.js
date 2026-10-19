@@ -1,7 +1,9 @@
 import Head from "next/head";
 import WorkoutToday from "../components/WorkoutToday";
 import CareerQuest from "../components/CareerQuest";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import EngineeringLoop from "../components/EngineeringLoop";
+import PlatformLab from "../components/PlatformLab";
 import styles from "../styles/Home.module.css";
 
 const experience = [
@@ -139,7 +141,24 @@ const skills = [
   ],
 ];
 function Arrow() {
-  return <span aria-hidden="true">↗</span>;
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M4 12 12 4M4 4h8v8"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 function ProjectVisual({ kind }) {
   if (kind === "platform")
@@ -209,7 +228,33 @@ function ProjectVisual({ kind }) {
 }
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef(null);
   const closeMenu = () => setMenuOpen(false);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onEscape(event) {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButton.current?.focus();
+      }
+    }
+    function onNavigate() {
+      setMenuOpen(false);
+    }
+    const desktop = window.matchMedia("(min-width: 961px)");
+    function onResize(event) {
+      if (event.matches) setMenuOpen(false);
+    }
+    document.addEventListener("keydown", onEscape);
+    window.addEventListener("hashchange", onNavigate);
+    desktop.addEventListener("change", onResize);
+    return () => {
+      document.removeEventListener("keydown", onEscape);
+      window.removeEventListener("hashchange", onNavigate);
+      desktop.removeEventListener("change", onResize);
+    };
+  }, [menuOpen]);
   return (
     <>
       <Head>
@@ -248,6 +293,8 @@ export default function Home() {
           </a>
           <button
             className={styles.menuButton}
+            ref={menuButton}
+            type="button"
             aria-expanded={menuOpen}
             aria-controls="navigation"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -266,8 +313,8 @@ export default function Home() {
             <a href="#experience" onClick={closeMenu}>
               Experience
             </a>
-            <a href="#career-quest" onClick={closeMenu}>
-              Play my career
+            <a href="#playground" onClick={closeMenu}>
+              Playground <span className={styles.newBadge}>NEW</span>
             </a>
             <a href="#about" onClick={closeMenu}>
               About
@@ -275,7 +322,11 @@ export default function Home() {
             <a href="#for-fun" onClick={closeMenu}>
               For fun
             </a>
-            <a className={styles.navContact} href="mailto:omar@omarnasr.ca">
+            <a
+              className={styles.navContact}
+              href="mailto:omar@omarnasr.ca"
+              onClick={closeMenu}
+            >
               Let’s talk <Arrow />
             </a>
           </nav>
@@ -285,8 +336,7 @@ export default function Home() {
         <section className={styles.hero} aria-labelledby="hero-heading">
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>
-              <span className={styles.dot} /> OTTAWA, CANADA · SENIOR DEVOPS
-              ENGINEER
+              <span className={styles.dot} /> OMAR NASR · OTTAWA, CANADA
             </p>
             <h1 id="hero-heading">
               Good software.
@@ -308,6 +358,11 @@ export default function Home() {
                 View experience <span aria-hidden="true">↓</span>
               </a>
             </div>
+            <a href="#playground" className={styles.playgroundLink}>
+              <span aria-hidden="true">↳</span> Or break something in the
+              playground
+              <Arrow />
+            </a>
             <div className={styles.heroMeta}>
               <span>
                 Currently at <strong>Fullscript</strong>
@@ -315,31 +370,7 @@ export default function Home() {
               <span>8+ years of engineering</span>
             </div>
           </div>
-          <div className={styles.heroArt} aria-hidden="true">
-            <div className={styles.orbit} />
-            <div className={styles.orbitInner} />
-            <div className={styles.artLabel}>FROM CODE TO CLOUD</div>
-            <div className={styles.stack}>
-              <div className={styles.layerTop}>
-                <span>01 / BUILD</span>
-                <strong>&lt; / &gt;</strong>
-              </div>
-              <div className={styles.layerMiddle}>
-                <span>02 / SECURE</span>
-                <strong>◇</strong>
-              </div>
-              <div className={styles.layerBottom}>
-                <span>03 / SCALE</span>
-                <strong>▦</strong>
-              </div>
-            </div>
-            <div className={styles.artCaption}>
-              <span className={styles.dot} /> ENGINEERED FOR RESILIENCE
-            </div>
-            <span className={styles.artCoordinate}>
-              45.4215° N &nbsp; 75.6972° W
-            </span>
-          </div>
+          <EngineeringLoop />
         </section>
         <div className={styles.trustStrip}>
           <span>EXPERIENCE ACROSS</span>
@@ -384,6 +415,7 @@ export default function Home() {
             ))}
           </div>
         </section>
+        <PlatformLab />
         <CareerQuest experience={experience} />
         <section
           id="experience"

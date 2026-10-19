@@ -15,6 +15,7 @@ npm run dev
 
 ```sh
 npm run lint
+npm test
 npm run build
 npm run build-storybook
 ```
@@ -28,3 +29,9 @@ Career history, selected work, and skill groups are in `pages/index.js`. Styling
 ## Deployment
 
 The existing Next.js deployment can continue using `npm run build`. Configure the hosting runtime to use Node.js 22 or newer. The portfolio does not require environment variables. The optional live workout feed requires server-only configuration and an Apple Health export from your phone; see [WORKOUT_SETUP.md](WORKOUT_SETUP.md). No external font services are required. The Pages Router is retained; Storybook uses the current Next.js Vite integration.
+
+## Interactive playground
+
+The hero’s Build / Secure / Scale controls explain engineering principles without auto-playing animation. The Resilience Lab in `components/PlatformLab.js` lets visitors change traffic, replicas, caching, and a single-server failure. It is an explicitly illustrative local simulation, not live infrastructure or a performance benchmark. Nothing is sent to a server or persisted.
+
+The deterministic model is in `lib/platform-lab.mjs`; `npm test` covers it alongside the existing workout ingestion and privacy tests. New components have interactive Storybook stories. Controls support keyboard input, reduced motion, and mobile layouts. The existing Career Quest and workout integration remain separate and unchanged.

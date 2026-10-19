@@ -6,7 +6,8 @@
 }
 .header {
   border-bottom: 1px solid var(--border);
-  background: rgba(12, 20, 27, 0.96);
+  background: rgba(12, 20, 27, 0.94);
+  backdrop-filter: blur(18px);
   position: sticky;
   top: 0;
   z-index: 20;
@@ -28,7 +29,7 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: 34px;
+  gap: 26px;
   font-size: 13px;
   color: var(--muted);
 }
@@ -61,11 +62,11 @@
 }
 .hero {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 36px;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 54px;
   align-items: center;
   min-height: 665px;
-  padding: 80px 0 75px;
+  padding: 86px 0 75px;
 }
 .eyebrow {
   font-family: monospace;
@@ -87,7 +88,7 @@
   flex-shrink: 0;
 }
 .hero h1 {
-  font-size: clamp(45px, 5vw, 68px);
+  font-size: clamp(45px, 5vw, 70px);
   letter-spacing: -3.5px;
   font-weight: 600;
   line-height: 1.09;
@@ -115,7 +116,7 @@
   background: var(--accent);
   color: #10241b;
   padding: 16px 20px;
-  border-radius: 4px;
+  border-radius: 7px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -152,103 +153,6 @@
 .heroMeta span + span {
   border-left: 1px solid var(--border);
   padding-left: 22px;
-}
-.heroArt {
-  position: relative;
-  height: 440px;
-  background-image: radial-gradient(#52677350 1px, transparent 1px);
-  background-size: 23px 23px;
-  overflow: hidden;
-}
-.orbit,
-.orbitInner {
-  position: absolute;
-  border: 1px solid #34465075;
-  border-radius: 50%;
-  width: 390px;
-  height: 390px;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.orbitInner {
-  width: 290px;
-  height: 290px;
-  top: 65px;
-}
-.artLabel {
-  font: 10px monospace;
-  letter-spacing: 2px;
-  color: #82949e;
-  position: absolute;
-  top: 18px;
-  left: 24px;
-}
-.stack {
-  position: absolute;
-  width: 240px;
-  left: 50%;
-  top: 105px;
-  transform: translateX(-50%) rotate(-12deg);
-}
-.stack > div {
-  height: 115px;
-  border: 1px solid #609a8660;
-  background: linear-gradient(135deg, #213b3b, #13272a);
-  border-radius: 13px;
-  transform: skewY(10deg);
-  box-shadow: 12px 22px 36px #0006;
-  position: absolute;
-  width: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 25px;
-}
-.stack span {
-  font: 10px monospace;
-  letter-spacing: 1px;
-  color: #a8c0bc;
-}
-.stack strong {
-  color: var(--accent);
-  font: 42px monospace;
-}
-.layerTop {
-  top: 0;
-  z-index: 3;
-}
-.stack .layerMiddle {
-  top: 78px;
-  z-index: 2;
-  background: linear-gradient(135deg, #1a2c35, #11212b);
-  border-color: #476173;
-}
-.stack .layerBottom {
-  top: 156px;
-  z-index: 1;
-  background: linear-gradient(135deg, #18252f, #0f1c25);
-  border-color: #354652;
-}
-.artCaption {
-  position: absolute;
-  bottom: 35px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  font: 9px monospace;
-  letter-spacing: 1.4px;
-  color: #b6cbc6;
-  display: flex;
-  gap: 9px;
-  align-items: center;
-}
-.artCoordinate {
-  position: absolute;
-  right: 13px;
-  bottom: 10px;
-  font: 9px monospace;
-  color: #71838e;
 }
 .trustStrip {
   border-top: 1px solid var(--border);
@@ -299,7 +203,7 @@
 }
 .projectCard {
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 14px;
   overflow: hidden;
   background: #101a22;
   transition:
@@ -730,22 +634,6 @@
   .hero h1 {
     font-size: 54px;
   }
-  .heroArt {
-    height: 390px;
-  }
-  .stack {
-    transform: translateX(-50%) rotate(-12deg) scale(0.85);
-    top: 90px;
-  }
-  .orbit {
-    width: 330px;
-    height: 330px;
-  }
-  .orbitInner {
-    width: 240px;
-    height: 240px;
-    top: 60px;
-  }
   .eyebrow {
     font-size: 9px;
   }
@@ -865,35 +753,6 @@
   }
   .heroMeta span + span {
     padding-left: 15px;
-  }
-  .heroArt {
-    height: 330px;
-    width: 100%;
-    max-width: 420px;
-    justify-self: center;
-  }
-  .stack {
-    top: 55px;
-    transform: translateX(-50%) rotate(-12deg) scale(0.8);
-  }
-  .orbit {
-    width: 300px;
-    height: 300px;
-    top: 0;
-  }
-  .orbitInner {
-    width: 220px;
-    height: 220px;
-    top: 40px;
-  }
-  .artCaption {
-    bottom: 20px;
-  }
-  .artLabel {
-    top: 12px;
-  }
-  .artCoordinate {
-    bottom: 0;
   }
   .trustStrip {
     display: grid;
@@ -1029,11 +888,109 @@
     border-top: 1px solid var(--border);
   }
 }
-.stack span {
-  white-space: nowrap;
+
+.newBadge {
+  margin-left: 4px;
+  font: 8px monospace;
+  color: var(--accent);
 }
-.stack strong {
-  white-space: nowrap;
-  flex-shrink: 0;
-  font-size: 35px;
+.playgroundLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: #b6c7be;
+  margin-top: 25px;
+  line-height: 1.6;
+}
+.playgroundLink:hover {
+  color: var(--accent);
+}
+.playgroundLink > span:first-child {
+  color: var(--accent);
+  font-size: 18px;
+}
+.heroMeta {
+  margin-top: 27px;
+}
+@media (min-width: 701px) and (max-width: 960px) {
+  .hero {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .hero h1 {
+    font-size: 46px;
+    letter-spacing: -2.3px;
+  }
+  .heroActions {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .heroMeta {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .heroMeta span + span {
+    border: 0;
+    padding-left: 0;
+  }
+}
+@media (max-width: 960px) {
+  .navWrap {
+    height: 72px;
+  }
+  .menuButton {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background: none;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    min-height: 44px;
+  }
+  .menuButton span {
+    font-size: 20px;
+  }
+  .nav {
+    display: none;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: #101b23;
+    border-bottom: 1px solid var(--border);
+    padding: 18px 24px;
+    align-items: stretch;
+    gap: 0;
+    max-height: calc(100dvh - 72px);
+    overflow-y: auto;
+  }
+  .navOpen {
+    display: flex;
+    flex-direction: column;
+  }
+  .nav a {
+    padding: 14px;
+    font-size: 14px;
+  }
+  .navContact {
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+}
+@media (max-width: 380px) {
+  .heroMeta {
+    flex-direction: column;
+    gap: 9px;
+  }
+  .heroMeta span + span {
+    border: 0;
+    padding: 0;
+  }
+  .hero h1 {
+    font-size: 39px;
+  }
 }

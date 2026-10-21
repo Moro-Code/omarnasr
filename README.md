@@ -35,3 +35,9 @@ The existing Next.js deployment can continue using `npm run build`. Configure th
 The hero’s Build / Secure / Scale controls explain engineering principles without auto-playing animation. The Resilience Lab in `components/PlatformLab.js` lets visitors change traffic, replicas, caching, and a single-server failure. It is an explicitly illustrative local simulation, not live infrastructure or a performance benchmark. Nothing is sent to a server or persisted.
 
 The deterministic model is in `lib/platform-lab.mjs`; `npm test` covers it alongside the existing workout ingestion and privacy tests. New components have interactive Storybook stories. Controls support keyboard input, reduced motion, and mobile layouts. The existing Career Quest and workout integration remain separate and unchanged.
+
+## Section navigation
+
+The shared directory in `lib/site-navigation.mjs` keeps header links in page order, including the Toolkit and Career Quest. `components/SiteNavigation.js` highlights the section at the reading line without changing the URL or announcing each scroll. On smaller screens the same links become a numbered directory; Escape restores the Menu button, focus or pointer navigation outside closes it, and selecting a destination focuses its heading. Native hash links preserve browser history and reduced-motion behavior. A no-JavaScript fallback keeps the mobile directory visible.
+
+`npm test` covers the section registry, tall and short sections, boundaries, and the bottom-of-page case. The existing workout integration, personal content, and interactive labs remain independent.

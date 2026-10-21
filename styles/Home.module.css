@@ -1,22 +1,7 @@
 .container,
-.navWrap,
 .footerInner {
   width: min(1180px, calc(100% - 80px));
   margin: auto;
-}
-.header {
-  border-bottom: 1px solid var(--border);
-  background: rgba(12, 20, 27, 0.94);
-  backdrop-filter: blur(18px);
-  position: sticky;
-  top: 0;
-  z-index: 20;
-}
-.navWrap {
-  height: 88px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 .brand {
   font-size: 36px;
@@ -26,27 +11,8 @@
 .brand span {
   color: var(--accent);
 }
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 26px;
-  font-size: 13px;
-  color: var(--muted);
-}
-.nav a:hover,
 .footer a:hover {
   color: var(--accent);
-}
-.navContact {
-  border: 1px solid #43514f;
-  border-radius: 5px;
-  padding: 12px 18px;
-  color: var(--text);
-  display: flex;
-  gap: 24px;
-}
-.menuButton {
-  display: none;
 }
 .skipLink {
   position: fixed;
@@ -624,7 +590,6 @@
 }
 @media (max-width: 1000px) {
   .container,
-  .navWrap,
   .footerInner {
     width: calc(100% - 48px);
   }
@@ -677,53 +642,11 @@
 }
 @media (max-width: 700px) {
   .container,
-  .navWrap,
   .footerInner {
     width: calc(100% - 40px);
   }
-  .navWrap {
-    height: 72px;
-  }
   .brand {
     font-size: 32px;
-  }
-  .menuButton {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    background: none;
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 9px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-  }
-  .menuButton span {
-    font-size: 20px;
-  }
-  .nav {
-    display: none;
-    position: absolute;
-    top: 72px;
-    left: 0;
-    right: 0;
-    background: #101b23;
-    border-bottom: 1px solid var(--border);
-    padding: 22px;
-    align-items: stretch;
-    gap: 0;
-  }
-  .navOpen {
-    display: flex;
-    flex-direction: column;
-  }
-  .nav a {
-    padding: 15px;
-    font-size: 14px;
-  }
-  .navContact {
-    justify-content: space-between;
-    margin-top: 10px;
   }
   .hero {
     grid-template-columns: 1fr;
@@ -889,11 +812,6 @@
   }
 }
 
-.newBadge {
-  margin-left: 4px;
-  font: 8px monospace;
-  color: var(--accent);
-}
 .playgroundLink {
   display: inline-flex;
   align-items: center;
@@ -935,52 +853,6 @@
     padding-left: 0;
   }
 }
-@media (max-width: 960px) {
-  .navWrap {
-    height: 72px;
-  }
-  .menuButton {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    background: none;
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 9px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    min-height: 44px;
-  }
-  .menuButton span {
-    font-size: 20px;
-  }
-  .nav {
-    display: none;
-    position: absolute;
-    top: 72px;
-    left: 0;
-    right: 0;
-    background: #101b23;
-    border-bottom: 1px solid var(--border);
-    padding: 18px 24px;
-    align-items: stretch;
-    gap: 0;
-    max-height: calc(100dvh - 72px);
-    overflow-y: auto;
-  }
-  .navOpen {
-    display: flex;
-    flex-direction: column;
-  }
-  .nav a {
-    padding: 14px;
-    font-size: 14px;
-  }
-  .navContact {
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-}
 @media (max-width: 380px) {
   .heroMeta {
     flex-direction: column;
@@ -993,4 +865,9 @@
   .hero h1 {
     font-size: 39px;
   }
+}
+
+/* One offset for all section links; the sticky header is handled by scroll-padding. */
+.container > section[id] {
+  scroll-margin-top: 16px;
 }

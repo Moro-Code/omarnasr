@@ -1,7 +1,7 @@
 import Head from "next/head";
 import WorkoutToday from "../components/WorkoutToday";
 import CareerQuest from "../components/CareerQuest";
-import { useEffect, useRef, useState } from "react";
+import SiteNavigation from "../components/SiteNavigation";
 import EngineeringLoop from "../components/EngineeringLoop";
 import PlatformLab from "../components/PlatformLab";
 import styles from "../styles/Home.module.css";
@@ -227,34 +227,6 @@ function ProjectVisual({ kind }) {
   );
 }
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuButton = useRef(null);
-  const closeMenu = () => setMenuOpen(false);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    function onEscape(event) {
-      if (event.key === "Escape") {
-        setMenuOpen(false);
-        menuButton.current?.focus();
-      }
-    }
-    function onNavigate() {
-      setMenuOpen(false);
-    }
-    const desktop = window.matchMedia("(min-width: 961px)");
-    function onResize(event) {
-      if (event.matches) setMenuOpen(false);
-    }
-    document.addEventListener("keydown", onEscape);
-    window.addEventListener("hashchange", onNavigate);
-    desktop.addEventListener("change", onResize);
-    return () => {
-      document.removeEventListener("keydown", onEscape);
-      window.removeEventListener("hashchange", onNavigate);
-      desktop.removeEventListener("change", onResize);
-    };
-  }, [menuOpen]);
   return (
     <>
       <Head>
@@ -286,53 +258,8 @@ export default function Home() {
       <a className={styles.skipLink} href="#main">
         Skip to content
       </a>
-      <header className={styles.header}>
-        <div className={styles.navWrap}>
-          <a href="#" className={styles.brand} aria-label="Omar Nasr home">
-            on<span>.</span>
-          </a>
-          <button
-            className={styles.menuButton}
-            ref={menuButton}
-            type="button"
-            aria-expanded={menuOpen}
-            aria-controls="navigation"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? "Close" : "Menu"}{" "}
-            <span aria-hidden="true">{menuOpen ? "×" : "+"}</span>
-          </button>
-          <nav
-            id="navigation"
-            aria-label="Main navigation"
-            className={`${styles.nav} ${menuOpen ? styles.navOpen : ""}`}
-          >
-            <a href="#work" onClick={closeMenu}>
-              Expertise
-            </a>
-            <a href="#experience" onClick={closeMenu}>
-              Experience
-            </a>
-            <a href="#playground" onClick={closeMenu}>
-              Playground <span className={styles.newBadge}>NEW</span>
-            </a>
-            <a href="#about" onClick={closeMenu}>
-              About
-            </a>
-            <a href="#for-fun" onClick={closeMenu}>
-              For fun
-            </a>
-            <a
-              className={styles.navContact}
-              href="mailto:omar@omarnasr.ca"
-              onClick={closeMenu}
-            >
-              Let’s talk <Arrow />
-            </a>
-          </nav>
-        </div>
-      </header>
-      <main id="main" className={styles.container}>
+      <SiteNavigation />
+      <main id="main" className={styles.container} tabIndex={-1}>
         <section className={styles.hero} aria-labelledby="hero-heading">
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>
@@ -534,7 +461,11 @@ export default function Home() {
           </div>
         </section>
         <WorkoutToday />
-        <section className={styles.contact} aria-labelledby="contact-heading">
+        <section
+          id="contact"
+          className={styles.contact}
+          aria-labelledby="contact-heading"
+        >
           <p className={styles.eyebrow}>LET’S CONNECT</p>
           <h2 id="contact-heading">
             Have a good problem?

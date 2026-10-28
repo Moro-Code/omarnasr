@@ -148,6 +148,9 @@
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+.examples a > svg {
+  flex-shrink: 0;
+}
 .date {
   display: block;
   color: #a3b6bc;

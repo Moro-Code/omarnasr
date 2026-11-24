@@ -144,11 +144,9 @@ export default function WorkoutToday() {
             Follow me on Strava <span aria-hidden="true">↗</span>
           </a>
           <div className={styles.decor} aria-hidden="true">
-            {[28, 45, 33, 62, 48, 77, 65, 91, 72, 100, 84, 115].map(
-              (height, i) => (
-                <span key={i} style={{ height }} />
-              ),
-            )}
+            {Array.from({ length: 12 }, (_, i) => (
+              <span key={i} />
+            ))}
           </div>
           <p className={styles.caption}>THE GOAL: KEEP SHOWING UP.</p>
         </div>
@@ -202,8 +200,8 @@ export default function WorkoutToday() {
           </div>
           {fresh && feed.workouts.length > 0 ? (
             <ul className={styles.workouts}>
-              {feed.workouts.map((workout) => (
-                <li key={workout.id}>
+              {feed.workouts.map((workout, index) => (
+                <li key={`${workout.startedAt}-${workout.name}-${index}`}>
                   <span className={styles.workoutIcon}>
                     <FitnessIcon small />
                   </span>

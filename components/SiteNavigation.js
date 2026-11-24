@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { currentSection, SITE_SECTIONS } from "../lib/site-navigation.mjs";
 import styles from "./SiteNavigation.module.css";
 
-export default function SiteNavigation() {
+export default function SiteNavigation({ atHome = true }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [current, setCurrent] = useState(null);
   const header = useRef(null);
@@ -110,13 +110,15 @@ export default function SiteNavigation() {
   }
 
   return (
-    <header className={styles.header} ref={header} data-site-header>
+    <header className={styles.header} ref={header} data-site-header id="top">
       <div className={styles.inner}>
         <a
-          href="#main"
+          href={atHome ? "#main" : "/"}
           className={styles.brand}
-          aria-label="Omar Nasr home"
-          onClick={(event) => navigate(event, "main")}
+          aria-label="on. Omar Nasr home"
+          onClick={(event) => {
+            if (atHome) navigate(event, "main");
+          }}
         >
           on<span>.</span>
         </a>
@@ -148,7 +150,7 @@ export default function SiteNavigation() {
             {SITE_SECTIONS.map((section, index) => (
               <li key={section.id}>
                 <a
-                  href={`#${section.id}`}
+                  href={atHome ? `#${section.id}` : `/#${section.id}`}
                   aria-current={current === section.id ? "location" : undefined}
                   className={
                     section.id === "contact" ? styles.contact : undefined
@@ -190,12 +192,7 @@ export default function SiteNavigation() {
         </nav>
       </div>
       <noscript>
-        <style>{`@media (max-width:1100px) {
-          [data-site-header] { position:relative; }
-          [data-site-header] > div { height:auto; flex-wrap:wrap; padding-top:16px; }
-          [data-site-header] button { display:none; }
-          [data-site-header] nav { display:block; position:static; width:100%; max-height:none; border:0; padding:16px 0; }
-        }`}</style>
+        <link rel="stylesheet" href="/no-js-nav.css" />
       </noscript>
     </header>
   );

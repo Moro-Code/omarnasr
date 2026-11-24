@@ -4,6 +4,7 @@ import {
   summarizeWorkouts,
   workoutDate,
   durationLabel,
+  publicWorkoutSnapshot,
 } from "./lib/workouts.mjs";
 import handler from "./pages/api/workouts.js";
 const sample = (overrides = {}) => ({
@@ -94,6 +95,40 @@ test("invalid, future, offset-free and old-only data cannot overwrite a snapshot
   ])
     assert.throws(() => summarizeWorkouts({ workouts: [entry] }, now));
   assert.throws(() => summarizeWorkouts({}, now));
+});
+test("public snapshots omit health identifiers and unused fields", () => {
+  const published = publicWorkoutSnapshot({
+    status: "ready",
+    source: "Apple Health",
+    date: "2026-09-30",
+    timeZone: "America/Toronto",
+    checkedAt: "2026-10-01T02:00:00.000Z",
+    didWorkout: true,
+    rawExportId: "should-not-leak",
+    workouts: [
+      {
+        id: "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE",
+        name: "Running",
+        sport: "Running",
+        startedAt: "2026-09-30T21:00:00.000Z",
+        distanceMetres: 5000,
+        durationSeconds: 1800,
+        route: [{ latitude: 45, longitude: -75 }],
+      },
+    ],
+    totals: { count: 1, distanceMetres: 5000, durationSeconds: 1800 },
+  });
+  const encoded = JSON.stringify(published);
+  assert.equal(encoded.includes("AAAAAAAA"), false);
+  assert.equal(encoded.includes("route"), false);
+  assert.equal(encoded.includes("rawExportId"), false);
+  assert.equal(published.workouts[0].id, undefined);
+  assert.equal(published.workouts[0].name, "Running");
+  assert.deepEqual(published.totals, {
+    count: 1,
+    distanceMetres: 5000,
+    durationSeconds: 1800,
+  });
 });
 test("empty export is explicit and has zero totals", () => {
   const result = summarizeWorkouts({ data: { workouts: [] } }, now);
@@ -204,6 +239,35 @@ test("authenticated full snapshots persist only safe fields; reads and delete wo
     await handler({ method: "GET", headers: {} }, failed);
     assert.equal(failed.statusCode, 503);
     assert.equal(JSON.stringify(failed.body).includes("private-token"), false);
+    const identified = {
+      status: "ready",
+      source: "Apple Health",
+      date: workoutDate(),
+      timeZone: "America/Toronto",
+      checkedAt: new Date().toISOString(),
+      didWorkout: true,
+      workouts: [
+        {
+          id: "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE",
+          name: "Running",
+          sport: "Running",
+          startedAt: new Date().toISOString(),
+          distanceMetres: 1000,
+          durationSeconds: 600,
+        },
+      ],
+      totals: { count: 1, distanceMetres: 1000, durationSeconds: 600 },
+    };
+    global.fetch = async () => ({
+      ok: true,
+      json: async () => ({ result: JSON.stringify(identified) }),
+    });
+    const visible = response();
+    await handler({ method: "GET", headers: {} }, visible);
+    assert.equal(visible.statusCode, 200);
+    assert.equal(visible.body.workouts[0].name, "Running");
+    assert.equal(visible.body.workouts[0].id, undefined);
+    assert.equal(JSON.stringify(visible.body).includes("AAAAAAAA"), false);
   } finally {
     global.fetch = oldFetch;
     names.forEach((n, i) => {

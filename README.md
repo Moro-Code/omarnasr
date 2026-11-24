@@ -1,6 +1,6 @@
 # Omar Nasr — personal portfolio
 
-Resume-based portfolio at [omarnasr.ca](https://omarnasr.ca), built with Next.js and React. Includes selected engineering work, a complete career timeline, skills, education, and contact links.
+Resume-based portfolio at [omarnasr.ca](https://www.omarnasr.ca), built with Next.js and React. Includes selected engineering work, a complete career timeline, skills, education, and contact links.
 
 ## Development
 

@@ -1,5 +1,6 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import {
+  publicWorkoutSnapshot,
   summarizeWorkouts,
   workoutDate,
   WORKOUT_TIME_ZONE,
@@ -109,7 +110,7 @@ export default async function handler(req, res) {
       Date.now() - new Date(data.checkedAt).getTime() > 7200000
     )
       return res.status(503).json(unknown());
-    return res.status(200).json(data);
+    return res.status(200).json(publicWorkoutSnapshot(data));
   } catch {
     return res.status(503).json(unknown());
   }

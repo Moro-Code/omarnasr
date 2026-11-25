@@ -93,6 +93,42 @@
   background: linear-gradient(to top, #1b3438, #8ad6b3);
   border-radius: 3px 3px 0 0;
 }
+.decor span:nth-child(1) {
+  height: 28px;
+}
+.decor span:nth-child(2) {
+  height: 45px;
+}
+.decor span:nth-child(3) {
+  height: 33px;
+}
+.decor span:nth-child(4) {
+  height: 62px;
+}
+.decor span:nth-child(5) {
+  height: 48px;
+}
+.decor span:nth-child(6) {
+  height: 77px;
+}
+.decor span:nth-child(7) {
+  height: 65px;
+}
+.decor span:nth-child(8) {
+  height: 91px;
+}
+.decor span:nth-child(9) {
+  height: 72px;
+}
+.decor span:nth-child(10) {
+  height: 100px;
+}
+.decor span:nth-child(11) {
+  height: 84px;
+}
+.decor span:nth-child(12) {
+  height: 115px;
+}
 .caption {
   color: var(--muted);
   font: 9px/1.6 monospace;

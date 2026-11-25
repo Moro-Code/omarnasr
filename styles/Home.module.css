@@ -60,7 +60,24 @@
   line-height: 1.09;
   margin: 25px 0;
 }
-.hero h1 span,
+.heroName {
+  display: block;
+  color: var(--text);
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 700;
+  letter-spacing: -1.2px;
+  line-height: 1.1;
+}
+.heroRole {
+  display: block;
+  margin: 10px 0 22px;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+.heroAccent,
 .about h2 span,
 .contact h2 span {
   color: var(--accent);
@@ -459,6 +476,15 @@
   left: 0;
   color: #63897c;
 }
+.portrait {
+  display: block;
+  width: min(240px, 100%);
+  height: auto;
+  margin-bottom: 28px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  object-fit: cover;
+}
 .about {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -774,6 +800,49 @@
   }
 }
 
+.notFound {
+  max-width: 680px;
+  padding: 88px 0 120px;
+}
+.notFound h1 {
+  margin: 18px 0 20px;
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 600;
+  letter-spacing: -2.4px;
+  line-height: 1.08;
+}
+.notFound .primaryButton {
+  width: fit-content;
+  margin-top: 28px;
+}
+.caseList {
+  display: grid;
+  gap: 22px;
+}
+.caseStudy {
+  padding: 27px 24px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #101a22;
+}
+.caseStudy h3 {
+  margin: 12px 0;
+  font-size: 23px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+.caseStudy p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.caseStudy ul {
+  margin: 16px 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
 .playgroundLink {
   display: inline-flex;
   align-items: center;

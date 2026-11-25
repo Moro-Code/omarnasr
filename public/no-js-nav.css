@@ -1,0 +1,21 @@
+@media (max-width: 1100px) {
+  [data-site-header] {
+    position: relative;
+  }
+  [data-site-header] > div {
+    height: auto;
+    flex-wrap: wrap;
+    padding-top: 16px;
+  }
+  [data-site-header] button {
+    display: none;
+  }
+  [data-site-header] nav {
+    display: block;
+    position: static;
+    width: 100%;
+    max-height: none;
+    border: 0;
+    padding: 16px 0;
+  }
+}

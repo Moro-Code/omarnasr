@@ -1,12 +1,31 @@
 import Head from "next/head";
-import WorkoutToday from "../components/WorkoutToday";
-import CareerQuest from "../components/CareerQuest";
+import dynamic from "next/dynamic";
 import SiteNavigation from "../components/SiteNavigation";
+import SiteFooter from "../components/SiteFooter";
 import EngineeringLoop from "../components/EngineeringLoop";
-import PlatformLab from "../components/PlatformLab";
 import ToolkitExplorer from "../components/ToolkitExplorer";
 import { experience } from "../lib/experience.mjs";
+import CaseStudies from "../components/CaseStudies";
+import { caseStudies } from "../lib/case-studies.mjs";
+import {
+  experiencePhrase,
+  earliestCareerYear,
+  JOB_TITLE,
+  LINKEDIN_URL,
+  profileJsonLd,
+  SITE_LOCALE,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+  SOCIAL_IMAGE,
+  SOCIAL_IMAGE_HEIGHT,
+  SOCIAL_IMAGE_WIDTH,
+} from "../lib/site.mjs";
 import styles from "../styles/Home.module.css";
+
+const PlatformLab = dynamic(() => import("../components/PlatformLab"));
+const CareerQuest = dynamic(() => import("../components/CareerQuest"));
+const WorkoutToday = dynamic(() => import("../components/WorkoutToday"));
 
 const projects = [
   {
@@ -37,6 +56,14 @@ const projects = [
     detail: "Stronger teams · Smoother delivery",
   },
 ];
+const yearsExperience = experiencePhrase(
+  new Date(),
+  earliestCareerYear(experience),
+);
+const description = `Omar Nasr is a senior DevOps and platform engineer in Ottawa. ${yearsExperience} building secure, resilient cloud infrastructure and thoughtful digital products.`;
+const socialDescription =
+  "Secure foundations. Reliable systems. Better developer experiences.";
+
 function Arrow() {
   return (
     <svg
@@ -127,31 +154,34 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Omar Nasr — DevOps & Platform Engineer</title>
-        <meta
-          name="description"
-          content="Omar Nasr is a senior DevOps and platform engineer in Ottawa. 8+ years building secure, resilient cloud infrastructure and thoughtful digital products."
-        />
+        <title>{SITE_TITLE}</title>
+        <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0c141b" />
-        <meta
-          property="og:title"
-          content="Omar Nasr — DevOps & Platform Engineer"
-        />
-        <meta
-          property="og:description"
-          content="Secure foundations. Reliable systems. Better developer experiences."
-        />
+        <meta property="og:title" content={SITE_TITLE} />
+        <meta property="og:description" content={socialDescription} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://omarnasr.ca" />
+        <meta property="og:url" content={SITE_URL} />
+        <meta property="og:image" content={SOCIAL_IMAGE} />
+        <meta property="og:image:width" content={String(SOCIAL_IMAGE_WIDTH)} />
         <meta
-          property="og:image"
-          content="https://omarnasr.ca/social-card.png"
+          property="og:image:height"
+          content={String(SOCIAL_IMAGE_HEIGHT)}
         />
+        <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:locale" content={SITE_LOCALE} />
         <meta name="twitter:card" content="summary_large_image" />
-        <link rel="canonical" href="https://omarnasr.ca" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="twitter:title" content={SITE_TITLE} />
+        <meta name="twitter:description" content={socialDescription} />
+        <meta name="twitter:image" content={SOCIAL_IMAGE} />
+        <link rel="canonical" href={SITE_URL} />
       </Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(profileJsonLd()).replace(/</g, "\\u003c"),
+        }}
+      />
       <a className={styles.skipLink} href="#main">
         Skip to content
       </a>
@@ -163,11 +193,13 @@ export default function Home() {
               <span className={styles.dot} /> OMAR NASR · OTTAWA, CANADA
             </p>
             <h1 id="hero-heading">
+              <span className={styles.heroName}>{SITE_NAME}</span>
+              <span className={styles.heroRole}>{JOB_TITLE}</span>
               Good software.
               <br />
               Solid foundations.
               <br />
-              <span>Built to last.</span>
+              <span className={styles.heroAccent}>Built to last.</span>
             </h1>
             <p className={styles.heroDescription}>
               I’m Omar — a DevOps and platform engineer turning complex systems
@@ -191,7 +223,7 @@ export default function Home() {
               <span>
                 Currently at <strong>Fullscript</strong>
               </span>
-              <span>8+ years of engineering</span>
+              <span>{yearsExperience} of engineering</span>
             </div>
           </div>
           <EngineeringLoop />
@@ -239,6 +271,7 @@ export default function Home() {
             ))}
           </div>
         </section>
+        <CaseStudies studies={caseStudies} />
         <PlatformLab />
         <CareerQuest experience={experience} />
         <section
@@ -308,6 +341,15 @@ export default function Home() {
           aria-labelledby="about-heading"
         >
           <div>
+            <img
+              className={styles.portrait}
+              src="/images/omar-nasr.webp"
+              width="512"
+              height="512"
+              alt="Portrait of Omar Nasr"
+              loading="lazy"
+              decoding="async"
+            />
             <p className={styles.eyebrow}>04 / BEHIND THE SYSTEMS</p>
             <h2 id="about-heading">
               An engineer.
@@ -339,10 +381,7 @@ export default function Home() {
               goal is always the same: make complex things work well, for the
               people who rely on them.
             </p>
-            <a
-              className={styles.textLink}
-              href="https://www.linkedin.com/in/ott-omar-nasr/"
-            >
+            <a className={styles.textLink} href={LINKEDIN_URL}>
               More about me on LinkedIn <Arrow />
             </a>
           </div>
@@ -368,24 +407,7 @@ export default function Home() {
           </p>
         </section>
       </main>
-      <footer className={styles.footer}>
-        <div className={styles.footerInner}>
-          <a className={styles.brand} href="#" aria-label="Back to top">
-            on<span>.</span>
-          </a>
-          <p>
-            © {new Date().getFullYear()} Omar Nasr · Built with care in Ottawa.
-          </p>
-          <div>
-            <a href="https://github.com/Moro-Code">
-              GitHub <Arrow />
-            </a>
-            <a href="https://www.linkedin.com/in/ott-omar-nasr/">
-              LinkedIn <Arrow />
-            </a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

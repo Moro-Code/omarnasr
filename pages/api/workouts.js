@@ -1,19 +1,14 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import {
-  publicWorkoutSnapshot,
+  resolveWorkoutRead,
+  shiftWorkoutDate,
   summarizeWorkouts,
+  unavailableWorkout,
   workoutDate,
-  WORKOUT_TIME_ZONE,
 } from "../../lib/workouts.mjs";
 
 export const config = { api: { bodyParser: { sizeLimit: "256kb" } } };
 const key = (date) => `omarnasr:workouts:${date}`;
-const unknown = () => ({
-  status: "unavailable",
-  source: "Apple Health",
-  date: workoutDate(),
-  timeZone: WORKOUT_TIME_ZONE,
-});
 function authorized(header) {
   const secret = process.env.WORKOUT_INGEST_TOKEN;
   if (!secret || secret.length < 32 || typeof header !== "string") return false;
@@ -68,7 +63,7 @@ export default async function handler(req, res) {
   if (req.method !== "GET" && !authorized(req.headers.authorization))
     return res.status(401).json({ error: "Unauthorized" });
   if (!storageConfig().url || !storageConfig().token)
-    return res.status(503).json(unknown());
+    return res.status(503).json(unavailableWorkout());
   try {
     if (req.method === "DELETE") {
       await redis([
@@ -100,18 +95,37 @@ export default async function handler(req, res) {
         .status(200)
         .json({ accepted: data.totals.count, date: data.date });
     }
-    const snapshot = await redis(["GET", key(workoutDate())]);
-    if (!snapshot) return res.status(503).json(unknown());
-    const data = JSON.parse(snapshot);
-    if (data.date !== workoutDate()) return res.status(503).json(unknown());
-    // A known workout stays true for its day. An old empty sync is inconclusive.
-    if (
-      !data.didWorkout &&
-      Date.now() - new Date(data.checkedAt).getTime() > 7200000
-    )
-      return res.status(503).json(unknown());
-    return res.status(200).json(publicWorkoutSnapshot(data));
+    const today = workoutDate();
+    const snapshot = await redis(["GET", key(today)]);
+    let todaySnapshot = null;
+    if (snapshot) {
+      try {
+        todaySnapshot = JSON.parse(snapshot);
+      } catch {
+        return res.status(503).json(unavailableWorkout(today));
+      }
+    }
+    const prior = [];
+    if (!todaySnapshot || todaySnapshot.date !== today) {
+      for (const days of [1, 2]) {
+        const date = shiftWorkoutDate(today, -days);
+        const older = await redis(["GET", key(date)]);
+        if (!older) continue;
+        try {
+          prior.push({ date, snapshot: JSON.parse(older) });
+        } catch {
+          // A corrupt older value is not an outage. Skip it.
+        }
+      }
+    }
+    const decision = resolveWorkoutRead({
+      today,
+      todaySnapshot,
+      prior,
+      now: new Date(),
+    });
+    return res.status(decision.statusCode).json(decision.body);
   } catch {
-    return res.status(503).json(unknown());
+    return res.status(503).json(unavailableWorkout());
   }
 }

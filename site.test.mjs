@@ -10,7 +10,7 @@ import {
   profileJsonLd,
   yearsOfExperience,
 } from "./lib/site.mjs";
-import {
+import nextConfig, {
   contentSecurityPolicy,
   documentHeaders,
   hostRedirects,
@@ -87,4 +87,8 @@ test("production document headers are strict and do not open CORS", () => {
   assert.equal(csp.includes("unsafe-eval"), false);
   assert.equal(headers["Access-Control-Allow-Origin"], undefined);
   assert.match(contentSecurityPolicy("development"), /unsafe-inline/);
+});
+
+test("production turbopack build keeps scripts external under script-src self", () => {
+  assert.equal(nextConfig.experimental.turbopackSharedRuntime, false);
 });

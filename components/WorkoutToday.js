@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  describeCheckIn,
   durationLabel,
   STRAVA_PROFILE,
   WORKOUT_TIME_ZONE,
@@ -51,9 +52,7 @@ export default function WorkoutToday() {
         const data = await response.json();
         if (!disposed)
           setFeed(
-            response.ok &&
-              data.status === "ready" &&
-              Array.isArray(data.workouts)
+            response.ok && data && typeof data.status === "string"
               ? data
               : { status: "unavailable" },
           );
@@ -84,20 +83,12 @@ export default function WorkoutToday() {
     };
   }, [attempt]);
 
-  const fresh =
-    feed?.status === "ready" &&
-    now &&
-    feed.date === workoutDate(now) &&
-    now - new Date(feed.checkedAt) < 24 * 60 * 60000;
-  const loading = !feed;
-  const workedOut = fresh && feed.didWorkout;
-  const label = loading
-    ? "Checking in…"
-    : !fresh
-      ? "Status unavailable"
-      : workedOut
-        ? "Yes. Work put in."
-        : "Not yet today.";
+  const view = describeCheckIn(feed, now);
+  const toneClass = {
+    yes: styles.yes,
+    notYet: styles.notYet,
+    unknown: styles.unknown,
+  }[view.tone];
   const dateLabel = now
     ? new Intl.DateTimeFormat("en-CA", {
         timeZone: WORKOUT_TIME_ZONE,
@@ -105,6 +96,27 @@ export default function WorkoutToday() {
         day: "numeric",
       }).format(now)
     : "Today";
+  const stats = view.showStats ? (
+    <dl
+      className={styles.stats}
+      {...(view.statsLabel ? { "aria-label": view.statsLabel } : {})}
+    >
+      <div>
+        <dt>Sessions</dt>
+        <dd>{view.totals.count}</dd>
+      </div>
+      <div>
+        <dt>Workout time</dt>
+        <dd>{durationLabel(view.totals.durationSeconds)}</dd>
+      </div>
+      <div>
+        <dt>Distance</dt>
+        <dd>
+          {(view.totals.distanceMetres / 1000).toFixed(1)} <small>km</small>
+        </dd>
+      </div>
+    </dl>
+  ) : null;
   return (
     <section
       id="for-fun"
@@ -156,51 +168,27 @@ export default function WorkoutToday() {
             <span>{dateLabel} · Ottawa</span>
           </div>
           <h3>Did Omar work out today?</h3>
-          <div
-            className={`${styles.status} ${workedOut ? styles.yes : fresh ? styles.notYet : styles.unknown}`}
-            role="status"
-            aria-live="polite"
-          >
-            <span className={styles.indicator} aria-hidden="true">
-              {workedOut ? "✓" : fresh ? "—" : "·"}
-            </span>
-            <strong>{label}</strong>
+          <div role="status" aria-live="polite" aria-atomic="true">
+            <div className={`${styles.status} ${toneClass}`}>
+              <span className={styles.indicator} aria-hidden="true">
+                {view.indicator}
+              </span>
+              <strong>{view.label}</strong>
+            </div>
+            <p className={styles.explanation}>{view.explanation}</p>
           </div>
-          <p className={styles.explanation}>
-            {loading
-              ? "Checking today’s workout sync."
-              : !fresh
-                ? "Today’s activity hasn’t been confirmed here. You can still catch up with me on Strava."
-                : workedOut
-                  ? `${feed.totals.count} ${feed.totals.count === 1 ? "workout" : "workouts"} logged today. Every session counts.`
-                  : "No workouts in the latest Apple Health sync. The day’s not over yet."}
-          </p>
-          {fresh && (
-            <dl className={styles.stats}>
-              <div>
-                <dt>Sessions</dt>
-                <dd>{feed.totals.count}</dd>
-              </div>
-              <div>
-                <dt>Workout time</dt>
-                <dd>{durationLabel(feed.totals.durationSeconds)}</dd>
-              </div>
-              <div>
-                <dt>Distance</dt>
-                <dd>
-                  {(feed.totals.distanceMetres / 1000).toFixed(1)}{" "}
-                  <small>km</small>
-                </dd>
-              </div>
-            </dl>
-          )}
+          {view.statsFirst && stats}
           <div className={styles.feedHeading}>
-            <h4>Today’s workouts</h4>
-            <span>Latest first</span>
+            <h4 id="workout-feed-heading">{view.feedTitle}</h4>
+            <span>{view.feedMeta}</span>
           </div>
-          {fresh && feed.workouts.length > 0 ? (
-            <ul className={styles.workouts}>
-              {feed.workouts.map((workout, index) => (
+          {view.statsFirst ? null : stats}
+          {view.workouts.length > 0 ? (
+            <ul
+              className={styles.workouts}
+              aria-labelledby="workout-feed-heading"
+            >
+              {view.workouts.map((workout, index) => (
                 <li key={`${workout.startedAt}-${workout.name}-${index}`}>
                   <span className={styles.workoutIcon}>
                     <FitnessIcon small />
@@ -227,22 +215,12 @@ export default function WorkoutToday() {
           ) : (
             <div className={styles.empty}>
               <FitnessIcon small />
-              <p>
-                {loading
-                  ? "Fetching the latest check-in…"
-                  : fresh
-                    ? "A fresh day, a clean slate."
-                    : "The next update will appear here."}
-              </p>
+              <p>{view.empty}</p>
             </div>
           )}
           <div className={styles.footer}>
-            <p>
-              {fresh
-                ? `Synced ${new Intl.DateTimeFormat("en-CA", { timeZone: WORKOUT_TIME_ZONE, hour: "numeric", minute: "2-digit" }).format(new Date(feed.checkedAt))} · Ottawa time`
-                : "Apple Health · Ottawa time"}
-            </p>
-            {fresh ? (
+            <p>{view.footer}</p>
+            {view.strava ? (
               <a
                 href={STRAVA_PROFILE}
                 target="_blank"
@@ -251,7 +229,7 @@ export default function WorkoutToday() {
                 View on Strava ↗
               </a>
             ) : (
-              !loading && (
+              view.retry && (
                 <button
                   type="button"
                   onClick={() => {

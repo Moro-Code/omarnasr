@@ -111,6 +111,11 @@ const nextConfig = {
       },
     ];
   },
+  // 16.4 inlines a per-route Turbopack bootstrap. script-src 'self' would block it
+  // and the page would not hydrate. Keep the bootstrap in an external script.
+  experimental: {
+    turbopackSharedRuntime: false,
+  },
   turbopack: {
     resolveAlias: polyfillAliases,
   },

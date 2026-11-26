@@ -1,10 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   CAREER_START_YEAR,
+  DAILY_REVALIDATE_SECONDS,
   SITE_URL,
   SOCIAL_IMAGE,
   JOB_TITLE,
+  datedSiteCopy,
   earliestCareerYear,
   experiencePhrase,
   profileJsonLd,
@@ -91,4 +94,51 @@ test("production document headers are strict and do not open CORS", () => {
 
 test("production turbopack build keeps scripts external under script-src self", () => {
   assert.equal(nextConfig.experimental.turbopackSharedRuntime, false);
+});
+
+function withoutServerClock(source) {
+  const marker = "export async function getStaticProps";
+  const start = source.indexOf(marker);
+  if (start === -1) return source;
+  const open = source.indexOf("{", start);
+  let depth = 0;
+  for (let index = open; index < source.length; index += 1) {
+    const character = source[index];
+    if (character === "{") depth += 1;
+    if (character === "}") {
+      depth -= 1;
+      if (depth === 0) return source.slice(0, start) + source.slice(index + 1);
+    }
+  }
+  throw new Error("Unclosed getStaticProps");
+}
+
+test("date-dependent copy is computed on the server and passed as props", () => {
+  const newYear = new Date(2027, 0, 2);
+  assert.equal(DAILY_REVALIDATE_SECONDS, 24 * 60 * 60);
+  assert.deepEqual(datedSiteCopy(newYear, [{ date: "2017 — 2018" }]), {
+    yearsExperience: "10+ years",
+    copyrightYear: 2027,
+  });
+  assert.deepEqual(datedSiteCopy(new Date(2026, 10, 24)), {
+    yearsExperience: "9+ years",
+    copyrightYear: 2026,
+  });
+
+  const pages = {
+    "pages/index.js": ["yearsExperience", "copyrightYear"],
+    "pages/404.js": ["copyrightYear"],
+    "components/SiteFooter.js": ["copyrightYear"],
+  };
+  for (const [file, props] of Object.entries(pages)) {
+    const source = readFileSync(new URL(`./${file}`, import.meta.url), "utf8");
+    const rendered = withoutServerClock(source);
+    assert.equal(rendered.includes("new Date("), false, file);
+    for (const prop of props) assert.match(rendered, new RegExp(prop));
+    if (file.startsWith("pages/")) {
+      assert.match(source, /export async function getStaticProps\(\)/);
+      assert.match(source, /revalidate: DAILY_REVALIDATE_SECONDS/);
+      assert.match(source, /datedSiteCopy\(new Date\(\)/);
+    }
+  }
 });

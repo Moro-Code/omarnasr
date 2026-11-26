@@ -1,9 +1,19 @@
 import Head from "next/head";
 import SiteNavigation from "../components/SiteNavigation";
 import SiteFooter from "../components/SiteFooter";
+import { DAILY_REVALIDATE_SECONDS, datedSiteCopy } from "../lib/site.mjs";
 import styles from "../styles/Home.module.css";
 
-export default function NotFound() {
+export async function getStaticProps() {
+  return {
+    props: {
+      copyrightYear: datedSiteCopy(new Date()).copyrightYear,
+    },
+    revalidate: DAILY_REVALIDATE_SECONDS,
+  };
+}
+
+export default function NotFound({ copyrightYear }) {
   return (
     <>
       <Head>
@@ -37,7 +47,7 @@ export default function NotFound() {
           </a>
         </section>
       </main>
-      <SiteFooter />
+      <SiteFooter copyrightYear={copyrightYear} />
     </>
   );
 }

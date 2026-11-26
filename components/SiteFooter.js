@@ -22,16 +22,14 @@ function Arrow() {
   );
 }
 
-export default function SiteFooter() {
+export default function SiteFooter({ copyrightYear }) {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerInner}>
         <a className={styles.brand} href="#top" aria-label="on. Back to top">
           on<span>.</span>
         </a>
-        <p>
-          © {new Date().getFullYear()} Omar Nasr · Built with care in Ottawa.
-        </p>
+        <p>© {copyrightYear} Omar Nasr · Built with care in Ottawa.</p>
         <div>
           <a href={GITHUB_URL}>
             GitHub <Arrow />

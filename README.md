@@ -24,7 +24,7 @@ npm run build-storybook
 
 ## Editing content
 
-Career history, selected work, and skill groups are in `pages/index.js`. Styling lives in `styles/Home.module.css` and `styles/globals.css`. The original resume PDF and its phone number are not published.
+Career history is in `lib/experience.mjs`, skill groups are in `lib/toolkit.mjs`, and selected work is in `pages/index.js`. Styling lives in `styles/Home.module.css`, component CSS modules, and `styles/globals.css`. The original resume PDF and its phone number are not published.
 
 ## Deployment
 
@@ -41,3 +41,9 @@ The deterministic model is in `lib/platform-lab.mjs`; `npm test` covers it along
 The shared directory in `lib/site-navigation.mjs` keeps header links in page order, including the Toolkit and Career Quest. `components/SiteNavigation.js` highlights the section at the reading line without changing the URL or announcing each scroll. On smaller screens the same links become a numbered directory; Escape restores the Menu button, focus or pointer navigation outside closes it, and selecting a destination focuses its heading. Native hash links preserve browser history and reduced-motion behavior. A no-JavaScript fallback keeps the mobile directory visible.
 
 `npm test` covers the section registry, tall and short sections, boundaries, and the bottom-of-page case. The existing workout integration, personal content, and interactive labs remain independent.
+
+## Toolkit in practice
+
+`components/ToolkitExplorer.js` connects each skill group to related public career highlights. Every skill stays visible; native `details` / `summary` disclosures reveal examples without JavaScript, persistence, or network requests. Multiple cards can stay open for comparison. Excerpts reuse the exact timeline copy through validated references in `lib/toolkit.mjs`, rather than adding claims about which tools were used at a particular company.
+
+Each example links to a stable, focusable role heading in the full timeline. The layout supports small screens, keyboard focus, and reduced motion. `npm test` checks skill preservation, unique anchors, source references, and topical relevance. The component also has an interactive Storybook story.

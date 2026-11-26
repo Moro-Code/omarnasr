@@ -3,6 +3,8 @@ import dynamic from "next/dynamic";
 import SiteNavigation from "../components/SiteNavigation";
 import SiteFooter from "../components/SiteFooter";
 import EngineeringLoop from "../components/EngineeringLoop";
+import ToolkitExplorer from "../components/ToolkitExplorer";
+import { experience } from "../lib/experience.mjs";
 import CaseStudies from "../components/CaseStudies";
 import { caseStudies } from "../lib/case-studies.mjs";
 import {
@@ -25,66 +27,6 @@ const PlatformLab = dynamic(() => import("../components/PlatformLab"));
 const CareerQuest = dynamic(() => import("../components/CareerQuest"));
 const WorkoutToday = dynamic(() => import("../components/WorkoutToday"));
 
-const experience = [
-  {
-    company: "Fullscript",
-    role: "Senior DevOps Engineer · DevSecOps",
-    date: "2025 — Present",
-    current: true,
-    description:
-      "Building the foundations for reliable, secure healthcare technology.",
-    bullets: [
-      "Built and operated EKS workloads supporting real-time platform features for thousands of concurrent users.",
-      "Built OWASP-based vulnerability triage workflows and implemented GuardDuty malware scanning for S3 uploads.",
-      "Delivered zero-downtime EKS ingress migrations and led on-call incident response.",
-    ],
-  },
-  {
-    company: "Fullscript",
-    role: "Senior JavaScript Engineer",
-    date: "2023 — 2025",
-    description:
-      "Connecting product engineering with performance and developer experience.",
-    bullets: [
-      "Consolidated React applications into a server-rendered Remix monorepo.",
-      "Built automated Lighthouse monitoring and an AI-powered code review assistant.",
-      "Mentored engineers and resolved performance regressions across critical user journeys.",
-    ],
-  },
-  {
-    company: "Canada Digital Service",
-    role: "Senior Full-Stack Developer · Treasury Board Secretariat",
-    date: "2021 — 2023",
-    description:
-      "Making government services more accessible, resilient, and useful.",
-    bullets: [
-      "Led end-to-end feature delivery for GC Forms with Next.js, TypeScript, Terraform, and AWS.",
-      "Delivered accessible, bilingual features and re-architected a high-availability Python service.",
-      "Led incident response, blameless retrospectives, and cross-team engineering standards.",
-    ],
-  },
-  {
-    company: "Employment and Social Development Canada",
-    role: "Full-Stack Developer · Digital Technology Solutions",
-    date: "2019 — 2021",
-    description:
-      "Built COVID-19 response systems, maintained the Benefits Finder, and led Alpha Site development and CI/CD.",
-  },
-  {
-    company: "Canada School of Public Service",
-    role: "Full-Stack Developer · Digital Academy",
-    date: "2018 — 2019",
-    description:
-      "Managed AWS infrastructure and built a real-time NLP dashboard for instructor feedback.",
-  },
-  {
-    company: "Health Canada",
-    role: "Data Analyst",
-    date: "2017 — 2018",
-    description:
-      "Built regulatory analysis tools and automated manual inspection and cost-recovery workflows.",
-  },
-];
 const projects = [
   {
     type: "AWS & CLOUD ARCHITECTURE",
@@ -113,51 +55,6 @@ const projects = [
     visual: "forms",
     detail: "Stronger teams · Smoother delivery",
   },
-];
-const skills = [
-  [
-    "01",
-    "Cloud & infrastructure",
-    ["AWS", "Kubernetes / EKS", "Terraform", "Docker", "Lambda", "RDS"],
-  ],
-  [
-    "02",
-    "Security & reliability",
-    [
-      "OWASP",
-      "GuardDuty",
-      "Snyk",
-      "Wiz",
-      "Incident response",
-      "Vulnerability management",
-    ],
-  ],
-  [
-    "03",
-    "Delivery & observability",
-    [
-      "GitHub Actions",
-      "GitLab CI",
-      "Jenkins",
-      "Prometheus",
-      "Grafana",
-      "Datadog",
-      "Sentry",
-    ],
-  ],
-  [
-    "04",
-    "Product engineering",
-    [
-      "Python",
-      "TypeScript",
-      "React",
-      "Next.js",
-      "Remix",
-      "PostgreSQL",
-      "GraphQL",
-    ],
-  ],
 ];
 const yearsExperience = experiencePhrase(
   new Date(),
@@ -395,7 +292,7 @@ export default function Home() {
           </div>
           <div className={styles.timeline}>
             {experience.map((job) => (
-              <article key={job.company + job.date} className={styles.job}>
+              <article key={job.id} className={styles.job}>
                 <div className={styles.jobDate}>
                   <span>{job.date}</span>
                   {job.current && (
@@ -403,7 +300,9 @@ export default function Home() {
                   )}
                 </div>
                 <div className={styles.jobContent}>
-                  <h3>{job.company}</h3>
+                  <h3 id={`experience-${job.id}`} tabIndex={-1}>
+                    {job.company}
+                  </h3>
                   <p className={styles.jobRole}>{job.role}</p>
                   <p className={styles.jobDescription}>{job.description}</p>
                   {job.bullets && (
@@ -434,19 +333,7 @@ export default function Home() {
               picture.
             </p>
           </div>
-          <div className={styles.skillsGrid}>
-            {skills.map(([n, title, items]) => (
-              <article className={styles.skillCard} key={title}>
-                <span className={styles.skillNumber}>{n}</span>
-                <h3>{title}</h3>
-                <ul className={styles.tags}>
-                  {items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
+          <ToolkitExplorer />
         </section>
         <section
           id="about"

@@ -6,8 +6,8 @@ import EngineeringLoop from "../components/EngineeringLoop";
 import CaseStudies from "../components/CaseStudies";
 import { caseStudies } from "../lib/case-studies.mjs";
 import {
-  experiencePhrase,
-  earliestCareerYear,
+  DAILY_REVALIDATE_SECONDS,
+  datedSiteCopy,
   JOB_TITLE,
   LINKEDIN_URL,
   profileJsonLd,
@@ -159,11 +159,6 @@ const skills = [
     ],
   ],
 ];
-const yearsExperience = experiencePhrase(
-  new Date(),
-  earliestCareerYear(experience),
-);
-const description = `Omar Nasr is a senior DevOps and platform engineer in Ottawa. ${yearsExperience} building secure, resilient cloud infrastructure and thoughtful digital products.`;
 const socialDescription =
   "Secure foundations. Reliable systems. Better developer experiences.";
 
@@ -253,7 +248,8 @@ function ProjectVisual({ kind }) {
     </div>
   );
 }
-export default function Home() {
+export default function Home({ yearsExperience, copyrightYear }) {
+  const description = `Omar Nasr is a senior DevOps and platform engineer in Ottawa. ${yearsExperience} building secure, resilient cloud infrastructure and thoughtful digital products.`;
   return (
     <>
       <Head>
@@ -520,7 +516,14 @@ export default function Home() {
           </p>
         </section>
       </main>
-      <SiteFooter />
+      <SiteFooter copyrightYear={copyrightYear} />
     </>
   );
+}
+
+export async function getStaticProps() {
+  return {
+    props: datedSiteCopy(new Date(), experience),
+    revalidate: DAILY_REVALIDATE_SECONDS,
+  };
 }
